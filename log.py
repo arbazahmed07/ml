@@ -1,22 +1,31 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
 from sklearn.linear_model import LogisticRegression
 
-# Data
-X = np.array([[1],[2],[3],[4],[5],[6]])
-y = np.array([0,0,0,1,1,1])
+# Load dataset
+data = load_iris()
+
+X = data.data[:, :1]
+y = data.target
 
 # Train model
-model = LogisticRegression().fit(X, y)
+model = LogisticRegression(max_iter=200)
+model.fit(X, y)
 
 # Accuracy
 print("Accuracy:", model.score(X, y))
 
-# Sigmoid curve
-x = np.linspace(1,6,100).reshape(-1,1)
-y_prob = model.predict_proba(x)[:,1]
+# Probability curve
+x = np.linspace(X.min(), X.max(), 100).reshape(-1,1)
+y_prob = model.predict_proba(x)[:,0]
 
 # Plot
 plt.scatter(X, y)
 plt.plot(x, y_prob)
+
+plt.xlabel("Feature")
+plt.ylabel("Probability")
+plt.title("Logistic Regression")
+
 plt.show()
